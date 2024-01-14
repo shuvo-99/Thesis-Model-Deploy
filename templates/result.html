@@ -1,0 +1,76 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Web App - Result</title>
+</head>
+<body>
+    <h1>Result</h1>
+    <img src="{{ image_path }}" alt="Uploaded Image" style="max-width: 500px;">
+    <p>Predicted Class: {{ predicted_class }}</p>
+</body>
+</html> -->
+
+<!-- ================================================================================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Classification Result</title>
+
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .result-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      img {
+        max-width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .prediction-result {
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .upload-another {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Image Classification Result</h1>
+    <div class="result-container">
+      <img src="{{ image_path }}" alt="Predicted Image" />
+      <div class="prediction-result">Prediction: {{ predicted_class }}</div>
+      <a href="/"
+        ><button class="upload-another">Upload Another Image</button></a
+      >
+    </div>
+  </body>
+</html>
