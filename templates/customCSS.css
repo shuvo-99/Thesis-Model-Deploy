@@ -1,0 +1,75 @@
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.containe {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.banner-bg {
+  background-color: rgb(241, 241, 241);
+}
+
+.link-deco {
+  text-decoration: none;
+}
+
+.h:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-out;
+}
+.flink {
+  text-decoration: none;
+}
+
+.hoverclr {
+  background-color: #39f4f9;
+}
+
+/* border bottom from middle */
+
+.l::before,
+.l::after {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: rgb(231, 50, 50);
+  transition: 0.2s;
+}
+
+.l::before {
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 4px;
+}
+.l::after {
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 4px;
+}
+
+.l:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.pro-btn {
+  background-color: lightskyblue;
+}
+
+.wrap-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  background: url(images/b2.png);
+  background-size: cover;
+  background-position: center;
+}

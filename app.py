@@ -251,14 +251,95 @@
 # ======================================== Further test ========================================================================
 
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+# from flask import Flask, render_template, request, jsonify, redirect, url_for
+# from keras.models import load_model
+# from keras.preprocessing.image import img_to_array, load_img
+# from werkzeug.utils import secure_filename
+# import os
+# import tensorflow as tf
+# import numpy as np
+# from flask import jsonify
+
+# app = Flask(__name__)
+
+# # Set the path for uploaded images
+# UPLOAD_FOLDER = 'D:/JS project/Thesis_Website/images'
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# # Load the pre-trained model
+# model = load_model('D:/JS project/Thesis_Website/model/10_layer_Without_Image_Enhance_1_v2.h5')
+
+# # Define the class labels
+# class_labels = ["CNV", "DME", "DRUSEN", "NORMAL"]
+
+# # Function to preprocess the image
+# def preprocess_image(image_path):
+#     img = load_img(image_path, target_size=(224, 224))
+#     img_array = img_to_array(img)
+#     img_array = np.expand_dims(img_array, axis=0)
+#     return img_array
+
+# # Route for the home page
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
+
+# # Set a confidence threshold (adjust as needed)
+# CONFIDENCE_THRESHOLD = 0.5
+
+# # Route for image prediction form
+# # Route for image prediction
+# # Route for image prediction
+# # Update the /predict route
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#     image = request.files.get('image')
+
+#     if not image:
+#         return jsonify({'error': 'No image provided'})
+
+#     # Use the original file name for saving
+#     image_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
+#     image.save(image_path)
+#     processed_image = preprocess_image(image_path)
+
+#     # Make prediction
+#     predictions = model.predict(processed_image)
+#     predicted_class_index = np.argmax(predictions)
+#     confidence = predictions[0, predicted_class_index]
+
+#     # Check if the confidence is below the threshold
+#     if confidence < CONFIDENCE_THRESHOLD:
+#         print(confidence)
+#         predicted_class = "Unknown"
+#     else:
+#         print(confidence)
+#         predicted_class = class_labels[predicted_class_index]
+
+#     # Return JSON response
+#     return jsonify({'image_path': image_path, 'predicted_class': predicted_class})
+
+# # # Route for the result page
+# # @app.route('/result')
+# # def result():
+# #     image_path = request.args.get('image_path', '')
+# #     predicted_class = request.args.get('predicted_class', '')
+
+# #     return render_template('templates/result.html', image_path=image_path, predicted_class=predicted_class)
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+# =================================================
+
+from flask import Flask, render_template, request, jsonify, send_file
 from keras.models import load_model
 from keras.preprocessing.image import img_to_array, load_img
 from werkzeug.utils import secure_filename
 import os
 import tensorflow as tf
 import numpy as np
-from flask import jsonify
 
 app = Flask(__name__)
 
@@ -288,9 +369,6 @@ def home():
 CONFIDENCE_THRESHOLD = 0.5
 
 # Route for image prediction form
-# Route for image prediction
-# Route for image prediction
-# Update the /predict route
 @app.route('/predict', methods=['POST'])
 def predict():
     image = request.files.get('image')
@@ -300,6 +378,10 @@ def predict():
 
     # Use the original file name for saving
     image_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
+    image_relative_path = os.path.relpath(image_path, app.config['UPLOAD_FOLDER'])
+    print('image_relative_path -->',image_relative_path)
+    print('image.filename -->',image.filename)
+    image_path = image_path.replace('\\', '/')
     image.save(image_path)
     processed_image = preprocess_image(image_path)
 
@@ -310,23 +392,20 @@ def predict():
 
     # Check if the confidence is below the threshold
     if confidence < CONFIDENCE_THRESHOLD:
-        print(confidence)
         predicted_class = "Unknown"
     else:
-        print(confidence)
         predicted_class = class_labels[predicted_class_index]
 
-    # Return JSON response
-    return jsonify({'image_path': image_path, 'predicted_class': predicted_class})
+    # Return JSON response with both image path and predicted class
+    return jsonify({'image_path': image_relative_path, 'predicted_class': predicted_class})
 
-# # Route for the result page
-# @app.route('/result')
-# def result():
-#     image_path = request.args.get('image_path', '')
-#     predicted_class = request.args.get('predicted_class', '')
-
-#     return render_template('templates/result.html', image_path=image_path, predicted_class=predicted_class)
+# Route to serve the image
+@app.route('/images/<filename>')
+# def serve_image(filename):
+#     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+def serve_image(filename):
+    decoded_filename = secure_filename(filename)  # Decode the filename
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], decoded_filename))
 
 if __name__ == '__main__':
     app.run(debug=True)
-
